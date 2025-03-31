@@ -2,7 +2,7 @@ const { Telegraf } = require('telegraf');
 const axios = require('axios');
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
-const WEBSITE_URL = process.env.WEBSITE_URL || 'https://nigga-vercel-hosted.vercel.app'; // Set this in Vercel env
+const WEBSITE_URL = process.env.WEBSITE_URL || 'https://vercel-telegram-bot-psi.vercel.app/'; // Set this in Vercel env
 
 // Ping command to check Vercel status
 bot.command('ping', async (ctx) => {
