@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">    <title>Starexx</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-dark.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>*{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}:root{--bg-color:#f6f8fa;--text-color:#24292f;--border-color:#d0d7de;--card-bg:#ffffff;--header-bg:#ffffff;--modal-bg:#ffffff;--input-bg:#f6f8fa;--highlight-bg:rgba(9,105,218,0.3);--icon-color:#57606a;--hover-bg:#f6f8fa}.dark-mode{--bg-color:#0d1117;--text-color:#c9d1d9;--border-color:#30363d;--card-bg:#161b22;--header-bg:#161b22;--modal-bg:#161b22;--input-bg:#0d1117;--highlight-bg:rgba(56,139,253,0.4);--icon-color:#8b949e;--hover-bg:#1f2937}body{background-color:var(--bg-color);color:var(--text-color);-webkit-tap-highlight-color:transparent;transition:background-color 0.3s,color 0.3s}::selection{background:rgba(31,111,234);color:white}.container{max-width:1280px;margin:0 auto;padding:20px}header{display:flex;align-items:center;justify-content:space-between;padding:16px 0;border-bottom:1px solid var(--border-color);margin-bottom:20px;background-color:transparent}.logo{display:flex;align-items:center;gap:8px;font-size:24px;font-weight:600;color:var(--text-color)}.logo i{color:var(--text-color)}.header-actions{display:flex;gap:16px;align-items:center}.theme-toggle{background:none;border:none;font-size:20px;cursor:pointer;color:transparent}.search-container{width:100%;max-width:600px;margin:20px auto}.search-box{width:100%;padding:12px 16px;font-size:16px;border:1px solid var(--border-color);border-radius:6px;resize:none;background-color:var(--input-bg);color:var(--text-color);outline:none;transition:border-color 0.3s,box-shadow 0.3s}.search-box:focus{border-color:#0969da;box-shadow:0 0 0 3px var(--highlight-bg)}.profile-container{display:flex;gap:20px;margin-bottom:30px;flex-wrap:wrap}.profile-card{background:var(--card-bg);border:1px solid var(--border-color);border-radius:6px;padding:20px;width:300px;display:flex;flex-direction:column;align-items:center}.profile-img{width:150px;height:150px;border-radius:50%;object-fit:cover;margin-bottom:16px;cursor:pointer}.profile-name{font-size:24px;font-weight:600;margin-bottom:8px}.profile-username{font-size:20px;color:var(--icon-color);margin-bottom:16px}.profile-bio{margin-bottom:16px;text-align:center}.profile-stats{display:flex;gap:16px;margin-top:auto}.stat{display:flex;flex-direction:column;align-items:center}.stat-count{font-weight:600}.stat-label{font-size:12px;color:var(--icon-color)}.repos-container{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}.repo-card{background:var(--card-bg);border:1px solid var(--border-color);border-radius:6px;padding:16px;display:flex;flex-direction:column;cursor:pointer;transition:transform 0.2s}.repo-card:hover{transform:translateY(-5px)}.repo-name{font-size:16px;font-weight:600;color:rgba(31,111,234);margin-bottom:8px;word-break:break-word}.repo-desc{font-size:14px;color:var(--icon-color);margin-bottom:16px;flex-grow:1}.repo-meta{display:flex;gap:16px;font-size:12px;color:var(--icon-color)}.repo-meta span{display:flex;align-items:center;gap:4px}.files-container{margin-top:20px;background:var(--bg-color);border:1px solid var(--border-color);border-radius:6px;overflow:hidden;display:none}.file-header{padding:12px 16px;background:var(--card-bg);border-bottom:1px solid var(--border-color);display:flex;justify-content:space-between;align-items:center}.file-path{font-size:14px;color:var(--icon-color);font-family:monospace}.back-btn{display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:6px;border:1px solid var(--border-color);background:rgba(31,111,234);color:white;cursor:pointer;transition:background-color 0.2s}.back-btn:active{opacity:0.7}.file-list{list-style:none}.file-item{padding:12px 16px;border-bottom:1px solid var(--border-color);display:flex;align-items:center;gap:8px;cursor:pointer}.file-item:last-child{border-bottom:none}.file-item:hover{background-color:var(--hover-bg)}.file-icon{color:var(--icon-color);width:20px;text-align:center}.file-name{flex-grow:1}.breadcrumbs{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--border-color);font-size:14px;background:var(--card-bg)}.breadcrumb{display:flex;align-items:center;gap:4px;cursor:pointer;color:rgba(31,111,234)}.breadcrumb:hover{text-decoration:underline}.breadcrumb-separator{color:var(--icon-color)}.modal{position:fixed;top:0;left:0;right:0;bottom:0;background-color:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:1000;opacity:0;pointer-events:none;transition:opacity 0.3s}.modal.active{opacity:1;pointer-events:all}.modal-content{background-color:var(--modal-bg);border-radius:6px;width:90%;max-width:800px;max-height:90vh;overflow:auto;position:relative;border:1px solid var(--border-color)}.code-content{padding:20px}.modal-header{padding:16px;border-bottom:1px solid var(--border-color);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:var(--modal-bg);z-index:1}.modal-title{font-weight:600}.modal-close{background:none;border:none;font-size:20px;cursor:pointer;color:var(--icon-color)}.modal-actions{display:flex;gap:10px}.modal-btn{padding:6px 12px;border-radius:6px;border:1px solid var(--border-color);background:var(--bg-color);color:var(--text-color);cursor:pointer;display:flex;align-items:center;gap:6px;transition:background-color 0.2s}.modal-btn:hover{background-color:var(--hover-bg)}.image-modal-content{padding:20px;display:flex;justify-content:center;align-items:center}.image-preview{max-width:100%;max-height:70vh;border-radius:6px}.loading{display:flex;justify-content:center;padding:20px;font-family:monospace}.error{color:#cf222e;text-align:center;padding:20px}pre{margin:0;background:var(--modal-bg) !important}code{font-family:monospace;font-size:14px;background:var(--modal-bg) !important}@media (max-width:768px){.profile-container{flex-direction:column;align-items:center}.profile-card{width:100%}.repos-container{grid-template-columns:1fr}}</style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fab fa-github"></i>
+                <span>Starexx</span>
+            </div>
+            <div class="header-actions">
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </header>
+        
+        <div class="search-container" id="searchContainer">
+            <textarea class="search-box" placeholder="Enter GitHub username" rows="1"></textarea>
+        </div>
+        
+        <div class="profile-container" id="profileContainer"></div>
+        
+        <div class="repos-container" id="reposContainer"></div>
+        
+        <div class="files-container" id="filesContainer">
+            <div class="breadcrumbs" id="breadcrumbs"></div>
+            <div class="file-header">
+                <div class="file-path" id="filePath"></div>
+                <button class="back-btn" id="backToRepos">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Back</span>
+                </button>
+            </div>
+            <ul class="file-list" id="fileList"></ul>
+        </div>
+    </div>
+    
+    <div class="modal" id="codeModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="codeModalTitle"></div>
+                <div class="modal-actions">
+                    <button class="modal-btn" id="copyCodeBtn">
+                        <i class="far fa-copy"></i> Copy
+                    </button>
+                    <button class="modal-close" id="closeCodeModal">&times;</button>
+                </div>
+            </div>
+            <div class="code-content">
+                <pre><code id="codeContent"></code></pre>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="imageModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Profile Image</div>
+                <div class="modal-actions">
+                    <button class="modal-btn" id="downloadImageBtn">
+                        <i class="fas fa-download"></i> Download
+                    </button>
+                    <button class="modal-close" id="closeImageModal">&times;</button>
+                </div>
+            </div>
+            <div class="image-modal-content">
+                <img id="imagePreview" class="image-preview" src="" alt="Profile Image">
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchBox = document.querySelector('.search-box');
+            const searchContainer = document.getElementById('searchContainer');
+            const profileContainer = document.getElementById('profileContainer');
+            const reposContainer = document.getElementById('reposContainer');
+            const filesContainer = document.getElementById('filesContainer');
+            const fileList = document.getElementById('fileList');
+            const backToRepos = document.getElementById('backToRepos');
+            const breadcrumbs = document.getElementById('breadcrumbs');
+            const filePath = document.getElementById('filePath');
+            const codeModal = document.getElementById('codeModal');
+            const codeModalTitle = document.getElementById('codeModalTitle');
+            const codeContent = document.getElementById('codeContent');
+            const closeCodeModal = document.getElementById('closeCodeModal');
+            const copyCodeBtn = document.getElementById('copyCodeBtn');
+            const imageModal = document.getElementById('imageModal');
+            const imagePreview = document.getElementById('imagePreview');
+            const closeImageModal = document.getElementById('closeImageModal');
+            const downloadImageBtn = document.getElementById('downloadImageBtn');
+            const themeToggle = document.getElementById('themeToggle');
+            
+            let currentUsername = '';
+            let currentRepo = '';
+            let currentFileUrl = '';
+            let currentImageUrl = '';
+            let currentPath = '';
+            let pathHistory = [];
+            
+            // Check for preferred color scheme
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.body.classList.add('dark-mode');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                themeToggle.classList.add('active');
+            }
+            
+            // Theme toggle
+            themeToggle.addEventListener('click', function() {
+                document.body.classList.toggle('dark-mode');
+                if (document.body.classList.contains('dark-mode')) {
+                    themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                    themeToggle.classList.add('active');
+                } else {
+                    themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                    themeToggle.classList.remove('active');
+                }
+                
+                // Update syntax highlighting theme
+                const links = document.querySelectorAll('link[rel="stylesheet"]');
+                links.forEach(link => {
+                    if (link.href.includes('highlight.js')) {
+                        if (document.body.classList.contains('dark-mode')) {
+                            link.href = link.href.replace('github.min.css', 'github-dark.min.css');
+                        } else {
+                            link.href = link.href.replace('github-dark.min.css', 'github.min.css');
+                        }
+                    }
+                });
+            });
+            
+            searchBox.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = (this.scrollHeight) + 'px';
+            });
+            
+            searchBox.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const username = this.value.trim();
+                    if (username) {
+                        currentUsername = username;
+                        fetchUserProfile(username);
+                        fetchUserRepos(username);
+                    }
+                }
+            });
+            
+            backToRepos.addEventListener('click', function() {
+                showRepositories();
+            });
+            
+            closeCodeModal.addEventListener('click', function() {
+                codeModal.classList.remove('active');
+            });
+            
+            copyCodeBtn.addEventListener('click', function() {
+                navigator.clipboard.writeText(codeContent.textContent).then(() => {
+                    const originalText = copyCodeBtn.innerHTML;
+                    copyCodeBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                    setTimeout(() => {
+                        copyCodeBtn.innerHTML = originalText;
+                    }, 2000);
+                });
+            });
+            
+            closeImageModal.addEventListener('click', function() {
+                imageModal.classList.remove('active');
+            });
+            
+            downloadImageBtn.addEventListener('click', function() {
+                const a = document.createElement('a');
+                a.href = currentImageUrl;
+                a.download = `${currentUsername}_profile.jpg`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            });
+            
+            function showRepositories() {
+                filesContainer.style.display = 'none';
+                reposContainer.style.display = 'grid';
+                searchContainer.style.display = 'block';
+                profileContainer.style.display = 'flex';
+                currentPath = '';
+                pathHistory = [];
+                updateBreadcrumbs();
+            }
+            
+            function showFiles() {
+                filesContainer.style.display = 'block';
+                reposContainer.style.display = 'none';
+                searchContainer.style.display = 'none';
+                profileContainer.style.display = 'none';
+            }
+            
+            async function fetchUserProfile(username) {
+                profileContainer.innerHTML = '<div class="loading">Loading...</div>';
+                
+                try {
+                    const response = await fetch(`https://api.github.com/users/${username}`);
+                    if (!response.ok) throw new Error('User not found');
+                    
+                    const data = await response.json();
+                    renderProfile(data);
+                } catch (error) {
+                    profileContainer.innerHTML = `<div class="error">${error.message}</div>`;
+                }
+            }
+            
+            function renderProfile(profile) {
+                profileContainer.innerHTML = `
+                    <div class="profile-card">
+                        <img src="${profile.avatar_url}" alt="${profile.name || profile.login}" class="profile-img" id="profileImage">
+                        <h1 class="profile-name">${profile.name || 'No name'}</h1>
+                        <p class="profile-username">${profile.login}</p>
+                        <p class="profile-bio">${profile.bio || 'No bio available'}</p>
+                        <div class="profile-stats">
+                            <div class="stat">
+                                <span class="stat-count">${profile.public_repos}</span>
+                                <span class="stat-label">Repositories</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-count">${profile.followers}</span>
+                                <span class="stat-label">Followers</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-count">${profile.following}</span>
+                                <span class="stat-label">Following</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                document.getElementById('profileImage').addEventListener('click', function() {
+                    currentImageUrl = profile.avatar_url;
+                    imagePreview.src = currentImageUrl;
+                    imageModal.classList.add('active');
+                });
+            }
+            
+            async function fetchUserRepos(username) {
+                reposContainer.innerHTML = '<div class="loading">Loading...</div>';
+                
+                try {
+                    const response = await fetch(`https://api.github.com/users/${username}/repos?sort=updated`);
+                    if (!response.ok) throw new Error('Failed to fetch repositories');
+                    
+                    const data = await response.json();
+                    renderRepos(data);
+                } catch (error) {
+                    reposContainer.innerHTML = `<div class="error">${error.message}</div>`;
+                }
+            }
+            
+            function renderRepos(repos) {
+                if (repos.length === 0) {
+                    reposContainer.innerHTML = '<div class="error">No repositories found</div>';
+                    return;
+                }
+                
+                reposContainer.innerHTML = '';
+                repos.forEach(repo => {
+                    const repoCard = document.createElement('div');
+                    repoCard.className = 'repo-card';
+                    repoCard.innerHTML = `
+                        <div class="repo-name">${repo.name}</div>
+                        <div class="repo-desc">${repo.description || 'No description available'}</div>
+                        <div class="repo-meta">
+                            <span><i class="fas fa-code-branch"></i> ${repo.language || 'Unknown'}</span>
+                            <span><i class="far fa-star"></i> ${repo.stargazers_count}</span>
+                            <span><i class="fas fa-code-fork"></i> ${repo.forks_count}</span>
+                        </div>
+                    `;
+                    
+                    repoCard.addEventListener('click', () => {
+                        currentRepo = repo.name;
+                        currentPath = '';
+                        pathHistory = [];
+                        fetchRepoContents(currentUsername, repo.name, '');
+                    });
+                    
+                    reposContainer.appendChild(repoCard);
+                });
+            }
+            
+            async function fetchRepoContents(username, repo, path) {
+                showFiles();
+                fileList.innerHTML = '<div class="loading">Loading...</div>';
+                filePath.textContent = path ? `${repo}/${path}` : repo;
+                
+                try {
+                    const response = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/${path}`);
+                    if (!response.ok) throw new Error('Failed to fetch repository contents');
+                    
+                    const data = await response.json();
+                    renderFiles(data, path);
+                    
+                    // Add to path history
+                    if (path) {
+                        pathHistory.push({
+                            path: path,
+                            data: data
+                        });
+                    }
+                    
+                    updateBreadcrumbs();
+                } catch (error) {
+                    fileList.innerHTML = `<div class="error">${error.message}</div>`;
+                }
+            }
+            
+            function renderFiles(files, path) {
+                fileList.innerHTML = '';
+                
+                // If not at root, add ".." for going up
+                if (path) {
+                    const parentItem = document.createElement('li');
+                    parentItem.className = 'file-item';
+                    parentItem.innerHTML = `
+                        <i class="fas fa-folder-open file-icon"></i>
+                        <div class="file-name">..</div>
+                    `;
+                    
+                    parentItem.addEventListener('click', () => {
+                        const parentPath = path.split('/').slice(0, -1).join('/');
+                        fetchRepoContents(currentUsername, currentRepo, parentPath);
+                    });
+                    
+                    fileList.appendChild(parentItem);
+                }
+                
+                // Sort directories first
+                files.sort((a, b) => {
+                    if (a.type === b.type) return a.name.localeCompare(b.name);
+                    return a.type === 'dir' ? -1 : 1;
+                });
+                
+                files.forEach(file => {
+                    const fileItem = document.createElement('li');
+                    fileItem.className = 'file-item';
+                    
+                    const iconClass = file.type === 'dir' ? 'fas fa-folder' : getFileIcon(file.name);
+                    
+                    fileItem.innerHTML = `
+                        <i class="${iconClass} file-icon"></i>
+                        <div class="file-name">${file.name}</div>
+                    `;
+                    
+                    fileItem.addEventListener('click', () => {
+                        if (file.type === 'dir') {
+                            const newPath = path ? `${path}/${file.name}` : file.name;
+                            fetchRepoContents(currentUsername, currentRepo, newPath);
+                        } else {
+                            showFileContent(file.name, file.download_url, file.html_url);
+                        }
+                    });
+                    
+                    fileList.appendChild(fileItem);
+                });
+            }
+            
+            function getFileIcon(filename) {
+                const extension = filename.split('.').pop().toLowerCase();
+                const fileIcons = {
+                    png: 'far fa-file-image',
+                    jpg: 'far fa-file-image',
+                    jpeg: 'far fa-file-image',
+                    gif: 'far fa-file-image',
+                    svg: 'far fa-file-image',
+                    bmp: 'far fa-file-image',
+                    pdf: 'far fa-file-pdf',
+                    doc: 'far fa-file-word',
+                    docx: 'far fa-file-word',
+                    xls: 'far fa-file-excel',
+                    xlsx: 'far fa-file-excel',
+                    ppt: 'far fa-file-powerpoint',
+                    pptx: 'far fa-file-powerpoint',
+                    txt: 'far fa-file-alt',
+                    zip: 'far fa-file-archive',
+                    rar: 'far fa-file-archive',
+                    '7z': 'far fa-file-archive',
+                    tar: 'far fa-file-archive',
+                    gz: 'far fa-file-archive',                
+                    js: 'far fa-file-code',
+                    jsx: 'far fa-file-code',
+                    ts: 'far fa-file-code',
+                    tsx: 'far fa-file-code',
+                    py: 'far fa-file-code',
+                    java: 'far fa-file-code',
+                    c: 'far fa-file-code',
+                    cpp: 'far fa-file-code',
+                    h: 'far fa-file-code',
+                    hpp: 'far fa-file-code',
+                    cs: 'far fa-file-code',
+                    go: 'far fa-file-code',
+                    rb: 'far fa-file-code',
+                    php: 'far fa-file-code',
+                    swift: 'far fa-file-code',
+                    kt: 'far fa-file-code',
+                    scala: 'far fa-file-code',
+                    rs: 'far fa-file-code',
+                    sh: 'far fa-file-code',
+                    html: 'far fa-file-code',
+                    css: 'far fa-file-code',
+                    scss: 'far fa-file-code',
+                    less: 'far fa-file-code',
+                    json: 'far fa-file-code',
+                    xml: 'far fa-file-code',
+                    yml: 'far fa-file-code',
+                    yaml: 'far fa-file-code',
+                    md: 'far fa-file-code',
+                    sql: 'far fa-file-code',
+                    default: 'far fa-file'
+                };
+                
+                return fileIcons[extension] || fileIcons.default;
+            }
+            
+            function updateBreadcrumbs() {
+                breadcrumbs.innerHTML = '';
+                
+                if (!currentRepo) return;
+                
+                // Add repository root
+                const repoCrumb = document.createElement('div');
+                repoCrumb.className = 'breadcrumb';
+                repoCrumb.innerHTML = `
+                    <i class="fas fa-code-branch"></i>
+                    <span>${currentRepo}</span>
+                `;
+                repoCrumb.addEventListener('click', () => {
+                    fetchRepoContents(currentUsername, currentRepo, '');
+                });
+                breadcrumbs.appendChild(repoCrumb);
+                
+                if (!currentPath) return;
+                
+                // Add path parts
+                const parts = currentPath.split('/');
+                parts.forEach((part, index) => {
+                    const separator = document.createElement('div');
+                    separator.className = 'breadcrumb-separator';
+                    separator.innerHTML = '<i class="fas fa-chevron-right"></i>';
+                    breadcrumbs.appendChild(separator);
+                    
+                    const crumb = document.createElement('div');
+                    crumb.className = 'breadcrumb';
+                    crumb.textContent = part;
+                    
+                    const pathToHere = parts.slice(0, index + 1).join('/');
+                    crumb.addEventListener('click', () => {
+                        fetchRepoContents(currentUsername, currentRepo, pathToHere);
+                    });
+                    
+                    breadcrumbs.appendChild(crumb);
+                });
+            }
+            
+            async function showFileContent(filename, fileUrl, htmlUrl) {
+                codeModalTitle.textContent = filename;
+                codeContent.textContent = 'Loading...';
+                codeModal.classList.add('active');
+                
+                try {
+                    const response = await fetch(fileUrl);
+                    if (!response.ok) throw new Error('Failed to load file content');
+                    
+                    const content = await response.text();
+                    codeContent.textContent = content;
+                    
+                    const extension = filename.split('.').pop();
+                    const language = getLanguageFromExtension(extension);
+                    
+                    if (language) {
+                        codeContent.className = language;
+                        hljs.highlightElement(codeContent);
+                    }
+                    
+                    currentFileUrl = fileUrl;
+                } catch (error) {
+                    codeContent.textContent = `Error: ${error.message}`;
+                }
+            }
+            
+            function getLanguageFromExtension(extension) {
+                const languages = {
+                    'js': 'javascript',
+                    'jsx': 'javascript',
+                    'ts': 'typescript',
+                    'tsx': 'typescript',
+                    'py': 'python',
+                    'java': 'java',
+                    'c': 'c',
+                    'cpp': 'cpp',
+                    'h': 'c',
+                    'hpp': 'cpp',
+                    'cs': 'csharp',
+                    'go': 'go',
+                    'rb': 'ruby',
+                    'php': 'php',
+                    'swift': 'swift',
+                    'kt': 'kotlin',
+                    'scala': 'scala',
+                    'rs': 'rust',
+                    'sh': 'bash',
+                    'html': 'html',
+                    'css': 'css',
+                    'scss': 'scss',
+                    'less': 'less',
+                    'json': 'json',
+                    'xml': 'xml',
+                    'yml': 'yaml',
+                    'yaml': 'yaml',
+                    'md': 'markdown',
+                    'sql': 'sql'
+                };
+                
+                return languages[extension.toLowerCase()] || null;
+            }
+            
+            document.addEventListener('click', function(e) {
+                if (e.target === codeModal) {
+                    codeModal.classList.remove('active');
+                }
+                if (e.target === imageModal) {
+                    imageModal.classList.remove('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
