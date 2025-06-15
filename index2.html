@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RealPega</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-dark.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+         .editor-wrapper, .line-numbers, #html-editor, #highlighting {
+           font-family: 'JetBrains Mono', 'Courier New', monospace;
+        }
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        :root {
+            --bg-color: #0d1117;
+            --text-color: #c9d1d9;
+            --border-color: #30363d;
+            --card-bg: #161b22;
+            --header-bg: #161b22;
+            --modal-bg: #161b22;
+            --input-bg: #0d1117;
+            --highlight-bg: rgba(56, 139, 253, 0.4);
+            --icon-color: #8b949e;
+            --hover-bg: #1f2937;
+            --alert-bg: #161b22;
+            --alert-border: #30363d;
+            --alert-text: #c9d1d9;
+            --primary-color: rgba(56, 139, 253);
+            --danger-color: #da3633;
+            --success-color: #3fb950;
+            --line-number-color: #484f58;
+            --cursor-color: #fff
+            ;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            -webkit-tap-highlight-color: transparent;
+            overscroll-behavior: none;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .editor-container {
+            display: flex;
+            flex-direction: column;
+            
+        }  
+        
+        .editor-wrapper {
+            position: relative;
+            flex-grow: 1;
+            border: 1px solid var(--border-color);
+            border-radius: 0 0 6px 6px;
+            overflow: hidden;
+            display: flex;
+        }
+
+        .line-numbers {
+            width: 40px;
+            background-color: var(--card-bg);
+            color: var(--line-number-color);
+            text-align: right;
+            padding: 16px 8px;
+            font-size: 14px;
+            line-height: 1.5;
+            font-family: 'JetBrains Mono', monospace, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            user-select: none;
+            border-right: 1px solid var(--border-color);
+        }
+
+        .editor-content {
+            position: relative;
+            flex-grow: 1;
+        }
+
+        #html-editor {
+            width: 100%;
+            height: 100%;
+            padding: 16px;
+            font-size: 14px;
+            background: transparent;
+            color: transparent;
+            caret-color: var(--cursor-color);
+            caret-width: 2px:
+            resize: none;
+            outline: none;
+            border: none;
+            position: absolute;
+            z-index: 2;
+            tab-size: 4;
+            white-space: pre;
+            line-height: 1.5;
+            overflow: auto !important;
+            transition: all 0.2s ease;
+        }
+
+        #html-editor::selection {
+            background: var(--highlight-bg);
+        }
+
+        #highlighting {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            padding: 16px;
+            font-size: 14px;
+            color: var(--text-color);
+            overflow: hidden;
+            white-space: pre;
+            pointer-events: none;
+            z-index: 1;
+            line-height: 1.5;
+        }
+
+        .panel-header {
+            padding: 12px 16px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-bottom: none;
+            display: flex;
+            border-radius: 6px 6px 0 0;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .panel-title {
+            font-weight: 600;
+        }
+
+        .panel-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .panel-btn {
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-color);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: background-color 0.2s;
+        }
+
+        .panel-btn:hover {
+            background-color: var(--hover-bg);
+        }
+
+        .panel-btn.run-btn {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-content {
+            background-color: var(--modal-bg);
+            border-radius: 6px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow: auto;
+            position: relative;
+            border: 1px solid var(--border-color);
+        }
+
+        .modal-header {
+            padding: 16px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            background: var(--modal-bg);
+            z-index: 1;
+        }
+
+        .modal-title {
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--icon-color);
+        }
+        
+        .preview-content {
+            width: 100%;
+            height: 70vh;
+            border: none;
+        }
+        
+        .alert-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--alert-bg);
+            border: 1px solid var(--alert-border);
+            border-radius: 6px;
+            padding: 20px;
+            z-index: 3000;
+            max-width: 400px;
+            color: white;
+            width: 90%;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .alert-modal.active {
+            display: block;
+        }
+
+        .alert-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .alert-title {
+            font-weight: 600;
+        }
+
+        .alert-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #8b949e;
+        }
+
+        .alert-message {
+            margin-bottom: 20px;
+        }
+
+        .alert-input {
+            width: 100%;
+            padding: 8px 12px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: white;
+            background: var(--input-bg);
+            outline: none;
+        }
+
+        .alert-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .alert-btn {
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            color: white;
+            transition: background-color 0.2s;
+        }
+
+        .alert-btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .alert-btn-danger {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        .alert-btn-secondary {
+            background: var(--bg-color);
+        }
+        
+        .hljs {
+            background: var(--modal-bg) !important;
+        }
+                        
+        .smooth-cursor::after {
+            content: "|";
+            position: absolute;
+            color: white;
+            font-weight: bold;
+        }
+        
+    @keyframes typeEffect {
+      0% {
+        opacity: 0;
+        transform: translateY(10px) scale(0.95);
+        filter: blur(2px);
+      }
+      50% {
+        opacity: 0.5;
+        transform: translateY(2px) scale(1.01);
+        filter: blur(0.5px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+      }
+    }
+
+    .typing-effect {
+      display: inline-block;
+      animation: butteryCodeType 0.25s cubic-bezier(0.25, 0.8, 0.3, 1) both;
+      white-space: pre;
+      will-change: transform, opacity, filter;
+    }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-code"></i>
+                <span>Starexx Editor</span>
+            </div>
+        </header>
+        
+        <div class="editor-container">
+            <div class="panel-header">
+                <div class="panel-title">Editor</div>
+                <div class="panel-actions">
+                    <button class="panel-btn run-btn" id="runBtn">
+                        <i class="fas fa-play"></i> Run
+                    </button>
+                </div>
+            </div>
+            <div class="editor-wrapper">
+                <div class="line-numbers" id="lineNumbers">1</div>
+                <div class="editor-content">
+                    <textarea id="html-editor" spellcheck="false">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8" /&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0" /&gt;
+  &lt;title&gt;Example&lt;/title&gt;
+  &lt;style&gt;
+    @keyframes butteryCodeType {
+      0% {
+        opacity: 0;
+        transform: translateY(10px) scale(0.95);
+        filter: blur(2px);
+      }
+      50% {
+        opacity: 0.5;
+        transform: translateY(2px) scale(1.01);
+        filter: blur(0.5px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+      }
+    }
+
+    .letter {
+      display: inline-block;
+      animation: butteryCodeType 0.25s cubic-bezier(0.25, 0.8, 0.3, 1) both;
+      white-space: pre;
+      will-change: transform, opacity, filter;
+    }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body style="background:#0d1117; color:#c9d1d9; font-family:monospace; padding:2rem;"&gt;
+
+  &lt;div id="editor" style="white-space:pre-wrap; line-height:1.6;"&gt;&lt;/div&gt;
+
+  &lt;script&gt;
+    const code = `Welcome to our HTML Editor. HTML Code for begginning. Created by Starexx!`;
+
+    const container = document.getElementById('editor');
+    let i = 0;
+
+    function typeNext() {
+      if (i &lt; code.length) {
+        const span = document.createElement('span');
+        span.textContent = code[i];
+        span.className = 'letter';
+        container.appendChild(span);
+        i++;
+        setTimeout(typeNext, 20);
+      }
+    }
+
+    typeNext();
+  &lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</textarea>
+                    <div id="highlighting"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="previewModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Preview</div>
+                <div class="modal-actions">
+                    <button class="modal-close" id="closePreviewModal">&times;</button>
+                </div>
+            </div>
+            <iframe class="preview-content" id="preview-frame"></iframe>
+        </div>
+    </div>
+    
+    <div class="alert-modal" id="alertModal">
+        <div class="alert-header">
+            <div class="alert-title" id="alertTitle">Alert</div>
+            <button class="alert-close" id="closeAlertModal">&times;</button>
+        </div>
+        <div class="alert-message" id="alertMessage"></div>
+        <div class="alert-footer">
+            <button class="alert-btn alert-btn-primary" id="confirmAlert">OK</button>
+        </div>
+    </div>
+    
+    <div class="alert-modal" id="confirmModal">
+        <div class="alert-header">
+            <div class="alert-title">Confirm</div>
+            <button class="alert-close" id="closeConfirmModal">&times;</button>
+        </div>
+        <div class="alert-message" id="confirmMessage"></div>
+        <div class="alert-footer">
+            <button class="alert-btn alert-btn-secondary" id="cancelConfirm">Cancel</button>
+            <button class="alert-btn alert-btn-primary" id="acceptConfirm">OK</button>
+        </div>
+    </div>
+    
+    <div class="alert-modal" id="promptModal">
+        <div class="alert-header">
+            <div class="alert-title">Prompt</div>
+            <button class="alert-close" id="closePromptModal">&times;</button>
+        </div>
+        <div class="alert-message" id="promptMessage"></div>
+        <input type="text" class="alert-input" id="promptInput">
+        <div class="alert-footer">
+            <button class="alert-btn alert-btn-secondary" id="cancelPrompt">Cancel</button>
+            <button class="alert-btn alert-btn-primary" id="acceptPrompt">OK</button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/html.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/javascript.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const htmlEditor = document.getElementById('html-editor');
+            const highlighting = document.getElementById('highlighting');
+            const lineNumbers = document.getElementById('lineNumbers');
+            const previewFrame = document.getElementById('preview-frame');
+            const runBtn = document.getElementById('runBtn');
+            const previewModal = document.getElementById('previewModal');
+            const closePreviewModal = document.getElementById('closePreviewModal');
+            const alertModal = document.getElementById('alertModal');
+            const alertTitle = document.getElementById('alertTitle');
+            const alertMessage = document.getElementById('alertMessage');
+            const closeAlertModal = document.getElementById('closeAlertModal');
+            const confirmAlert = document.getElementById('confirmAlert');
+            const confirmModal = document.getElementById('confirmModal');
+            const confirmMessage = document.getElementById('confirmMessage');
+            const closeConfirmModal = document.getElementById('closeConfirmModal');
+            const cancelConfirm = document.getElementById('cancelConfirm');
+            const acceptConfirm = document.getElementById('acceptConfirm');
+            const promptModal = document.getElementById('promptModal');
+            const promptMessage = document.getElementById('promptMessage');
+            const promptInput = document.getElementById('promptInput');
+            const closePromptModal = document.getElementById('closePromptModal');
+            const cancelPrompt = document.getElementById('cancelPrompt');
+            const acceptPrompt = document.getElementById('acceptPrompt');
+            
+            const urlParams = new URLSearchParams(window.location.search);
+            const pasteCode = urlParams.get('paste');
+            if (pasteCode) {
+                htmlEditor.value = decodeURIComponent(pasteCode);
+            }
+            
+            let alertResolve;
+            let confirmResolve;
+            let promptResolve;
+            let typingTimeout;
+            let lastTypedTime = 0;
+            
+            window.showAlert = function(message, title = 'Alert') {
+                alertTitle.textContent = title;
+                alertMessage.textContent = message;
+                alertModal.classList.add('active');
+                return new Promise(resolve => {
+                    alertResolve = resolve;
+                });
+            };
+            
+            window.showConfirm = function(message, title = 'Confirm') {
+                confirmMessage.textContent = message;
+                confirmModal.classList.add('active');
+                return new Promise(resolve => {
+                    confirmResolve = resolve;
+                });
+            };
+            
+            window.showPrompt = function(message, defaultValue = '', title = 'Prompt') {
+                promptMessage.textContent = message;
+                promptInput.value = defaultValue;
+                promptModal.classList.add('active');
+                promptInput.focus();
+                return new Promise(resolve => {
+                    promptResolve = resolve;
+                });
+            };
+            
+            function closeAlert() {
+                alertModal.classList.remove('active');
+                if (alertResolve) alertResolve();
+            }
+            
+            function closeConfirm(result) {
+                confirmModal.classList.remove('active');
+                if (confirmResolve) confirmResolve(result);
+            }
+            
+            function closePrompt(result, value) {
+                promptModal.classList.remove('active');
+                if (promptResolve) promptResolve({ result, value });
+            }
+            
+            closeAlertModal.addEventListener('click', closeAlert);
+            confirmAlert.addEventListener('click', closeAlert);
+            closeConfirmModal.addEventListener('click', () => closeConfirm(false));
+            cancelConfirm.addEventListener('click', () => closeConfirm(false));
+            acceptConfirm.addEventListener('click', () => closeConfirm(true));
+            closePromptModal.addEventListener('click', () => closePrompt(false, null));
+            cancelPrompt.addEventListener('click', () => closePrompt(false, null));
+            acceptPrompt.addEventListener('click', () => closePrompt(true, promptInput.value));
+            promptInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') closePrompt(true, promptInput.value);
+            });
+            
+            runBtn.addEventListener('click', function() {
+                updatePreview();
+                previewModal.classList.add('active');
+            });
+            
+            closePreviewModal.addEventListener('click', function() {
+                previewModal.classList.remove('active');
+            });
+            
+            function updatePreview() {
+                const html = htmlEditor.value;
+                const previewDoc = previewFrame.contentDocument || previewFrame.contentWindow.document;
+                const customScript = `<script>
+                    window.alert=function(e){return window.parent.showAlert(e,'Alert')};
+                    window.confirm=function(e){return window.parent.showConfirm(e,'Confirm')};
+                    window.prompt=function(e,t){return window.parent.showPrompt(e,t,'Prompt').then(e=>e?e.value:null)};
+                    window.showAlert=function(e){return window.parent.showAlert(e,'Alert')};
+                    window.showConfirm=function(e){return window.parent.showConfirm(e,'Confirm')};
+                    window.showPrompt=function(e,t){return window.parent.showPrompt(e,t,'Prompt').then(e=>e?e.value:null)};
+                <\/script>`;
+                previewDoc.open();
+                previewDoc.write(customScript + html);
+                previewDoc.close();
+            }
+            
+            function updateLineNumbers() {
+                const lines = htmlEditor.value.split('\n');
+                let lineNumbersHTML = '';
+                for (let i = 0; i < lines.length; i++) {
+                    lineNumbersHTML += (i + 1) + '<br>';
+                }
+                lineNumbers.innerHTML = lineNumbersHTML;
+            }
+            
+            function applySyntaxHighlighting() {
+                const code = htmlEditor.value;
+                const highlighted = hljs.highlightAuto(code, ['html', 'xml', 'javascript', 'css']);
+                highlighting.innerHTML = highlighted.value;
+                updateLineNumbers();
+            }
+            
+            function syncScroll() {
+                highlighting.scrollTop = htmlEditor.scrollTop;
+                highlighting.scrollLeft = htmlEditor.scrollLeft;
+                lineNumbers.scrollTop = htmlEditor.scrollTop;
+            }
+            
+            function handleTypingEffect() {
+                const now = Date.now();
+                if (now - lastTypedTime > 50) {
+                    highlighting.classList.add('typing-effect');
+                    setTimeout(() => {
+                        highlighting.classList.remove('typing-effect');
+                    }, 100);
+                }
+                lastTypedTime = now;
+            }
+            
+            htmlEditor.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = this.scrollHeight + 'px';
+                handleTypingEffect();
+                applySyntaxHighlighting();
+            });
+            
+            htmlEditor.addEventListener('scroll', function() {
+                requestAnimationFrame(syncScroll);
+            });
+            
+            htmlEditor.addEventListener('keydown', function(e) {
+                if (e.key === 'Tab') {
+                    e.preventDefault();
+                    const start = this.selectionStart;
+                    const end = this.selectionEnd;
+                    this.value = this.value.substring(0, start) + '    ' + this.value.substring(end);
+                    this.selectionStart = this.selectionEnd = start + 4;
+                    applySyntaxHighlighting();
+                }
+            });
+            
+            document.addEventListener('click', function(e) {
+                if (e.target === previewModal) previewModal.classList.remove('active');
+                if (e.target === alertModal) closeAlert();
+                if (e.target === confirmModal) closeConfirm(false);
+                if (e.target === promptModal) closePrompt(false, null);
+            });
+            
+            updateLineNumbers();
+            applySyntaxHighlighting();
+            htmlEditor.style.height = htmlEditor.scrollHeight + 'px';
+            
+        });
+    </script>
+</body>
+</html>
