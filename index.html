@@ -66,15 +66,15 @@
         .option-btn {
             padding: 8px 16px;
             border-radius: 6px;
-            background: #0d1117;
+            background: rgba(35, 134, 54);
             color: white;
-            border: 1px solid #30363d;
+            border: 1px solid rgba(69, 152, 84);
             cursor: pointer;
             transition: background-color 0.2s;
         }
         
-        .option-btn:hover {
-            background: #1a73e8;
+        .option-btn:active {
+            opacity: 0.8;
         }
 
         /* Full Screen Modal Styles */
@@ -124,7 +124,7 @@
             flex: 1;
             width: 100%;
             border: none;
-            background: white;
+            background: transparent;
         }
 
         .modal-controls {
@@ -182,14 +182,14 @@
             const fullscreenBtn = document.getElementById('fullscreenBtn');
             
             option1Btn.addEventListener('click', function() {
-                modalTitle.textContent = "Realpega";
+                modalTitle.textContent = "HTML Editor";
                 previewFrame.src = "https://starexxx.github.io/RealPega/index2.html";
                 previewModal.classList.add('active');
                 document.body.style.overflow = 'hidden';
             });
             
             option2Btn.addEventListener('click', function() {
-                modalTitle.textContent = "Realpega";
+                modalTitle.textContent = "Github Profile";
                 previewFrame.src = "https://starexxx.github.io/RealPega/index3.html";
                 previewModal.classList.add('active');
                 document.body.style.overflow = 'hidden';
