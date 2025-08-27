@@ -120,29 +120,37 @@
             padding: 4px;
         }
         
-        .preview-content {
+        .preview-wrapper {
+            position: relative;
             flex: 1;
+            background: #0d1117;
+        }
+
+        .preview-content {
             width: 100%;
+            height: 100%;
             border: none;
-            background: transparent;
+            background: #0d1117;
+            display: none; /* hide until loaded */
         }
 
-        .modal-controls {
-            padding: 8px 16px;
-            background: #161b22;
-            border-top: 1px solid #30363d;
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
+        /* Loader */
+        .loader {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 4px solid #30363d;
+            border-top: 4px solid #58a6ff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
         }
 
-        .modal-btn {
-            padding: 6px 12px;
-            border-radius: 4px;
-            background: rgba(56, 139, 253);
-            color: white;
-            border: none;
-            cursor: pointer;
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
         }
     </style>
 </head>
@@ -159,6 +167,7 @@
             <div class="option-buttons">
                 <button class="option-btn" id="option1Btn">HTML Editor</button>
                 <button class="option-btn" id="option2Btn">Github Profile</button>
+                <button class="option-btn" id="chatBtn">Chat</button> <!-- NEW -->
             </div>
         </div>
     </div>
@@ -167,63 +176,65 @@
             <div class="modal-title" id="modalTitle">Preview</div>
             <button class="modal-close" id="closePreviewModal">&times;</button>
         </div>
-        <iframe class="preview-content" id="preview-frame"></iframe>
+        <div class="preview-wrapper">
+            <div class="loader" id="loader"></div>
+            <iframe class="preview-content" id="preview-frame" allowtransparency="true"></iframe>
+        </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const option1Btn = document.getElementById('option1Btn');
             const option2Btn = document.getElementById('option2Btn');
+            const chatBtn = document.getElementById('chatBtn');
             const previewModal = document.getElementById('previewModal');
             const closePreviewModal = document.getElementById('closePreviewModal');
             const previewFrame = document.getElementById('preview-frame');
             const modalTitle = document.getElementById('modalTitle');
-            const refreshBtn = document.getElementById('refreshBtn');
-            const fullscreenBtn = document.getElementById('fullscreenBtn');
+            const loader = document.getElementById('loader');
             
-            option1Btn.addEventListener('click', function() {
-                modalTitle.textContent = "HTML Editor";
-                previewFrame.src = "https://9112000.github.io/RealPega/index2.html";
+            function openModal(title, src) {
+                modalTitle.textContent = title;
+                loader.style.display = "block";
+                previewFrame.style.display = "none";
+                previewFrame.src = src;
                 previewModal.classList.add('active');
                 document.body.style.overflow = 'hidden';
+            }
+
+            option1Btn.addEventListener('click', function() {
+                openModal("HTML Editor", "https://9112000.github.io/RealPega/index2.html");
             });
             
             option2Btn.addEventListener('click', function() {
-                modalTitle.textContent = "Github Profile";
-                previewFrame.src = "https://9112000.github.io/RealPega/index3.html";
-                previewModal.classList.add('active');
-                document.body.style.overflow = 'hidden';
+                openModal("Github Profile", "https://9112000.github.io/RealPega/index3.html");
+            });
+
+            chatBtn.addEventListener('click', function() {
+                openModal("Chat", "https://realpegachat.onrender.com");
             });
 
             closePreviewModal.addEventListener('click', function() {
                 closeModal();
             });
-            
-            refreshBtn.addEventListener('click', function() {
-                previewFrame.src = previewFrame.src;
+
+            // Hide loader when iframe loads
+            previewFrame.addEventListener('load', function() {
+                loader.style.display = "none";
+                previewFrame.style.display = "block";
             });
-          
-            fullscreenBtn.addEventListener('click', function() {
-                if (document.fullscreenElement) {
-                    document.exitFullscreen();
-                } else {
-                    previewFrame.requestFullscreen().catch(err => {
-                        console.error('Error attempting to enable fullscreen:', err);
-                    });
-                }
-            });
-           
+
+            function closeModal() {
+                previewModal.classList.remove('active');
+                previewFrame.src = "";
+                document.body.style.overflow = 'auto';
+            }
+
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape') {
                     closeModal();
                 }
             });
-            
-            function closeModal() {
-                previewModal.classList.remove('active');
-                previewFrame.src = "";
-                document.body.style.overflow = 'auto'; // Re-enable scrolling
-            }
         });
     </script>
 </body>
