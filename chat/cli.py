@@ -1,3 +1,8 @@
+from flask import Flask, Response
+
+app = Flask(__name__)
+
+client = """
 import requests
 import threading
 import time
@@ -161,3 +166,11 @@ if __name__ == "__main__":
     client.connect()
     threading.Thread(target=client.poll, daemon=True).start()
     client.msg()
+"""
+
+@app.route("/")
+def show():
+    return Response(client, mimetype='text/plain')
+
+if __name__ == "__main__":
+    app.run()
