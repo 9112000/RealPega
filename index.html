@@ -21,6 +21,11 @@
             overscroll-behavior: none;
         }
 
+        /* Telegram Web App specific styles */
+        body.tg-webapp {
+            margin-top: 20px;
+        }
+
         .container {
             max-width: 1280px;
             margin: 0 auto;
@@ -61,6 +66,7 @@
         .option-buttons {
             display: flex;
             gap: 10px;
+            flex-wrap: wrap;
         }
         
         .option-btn {
@@ -167,12 +173,12 @@
             <div class="option-buttons">
                 <button class="option-btn" id="option1Btn">HTML Editor</button>
                 <button class="option-btn" id="option2Btn">Github Profile</button>
-                <button class="option-btn" id="chatBtn">Chat</button> <!-- NEW -->
+                <button class="option-btn" id="chatBtn">Chat</button>
             </div>
         </div>
     </div>
     <div class="modal" id="previewModal">
-        <div class="modal-header">
+        <div class="modal-header" id="modalHeader">
             <div class="modal-title" id="modalTitle">Preview</div>
             <button class="modal-close" id="closePreviewModal">&times;</button>
         </div>
@@ -182,46 +188,91 @@
         </div>
     </div>
 
-
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const option1Btn = document.getElementById('option1Btn');
-    const option2Btn = document.getElementById('option2Btn');
-    const chatBtn = document.getElementById('chatBtn');
-    const previewModal = document.getElementById('previewModal');
-    const closePreviewModal = document.getElementById('closePreviewModal');
-    const previewFrame = document.getElementById('preview-frame');
-    const modalTitle = document.getElementById('modalTitle');
-    const loader = document.getElementById('loader');
-    function openModal(title, src) {
-        modalTitle.textContent = title;
-        loader.style.display = "block";
-        previewFrame.style.display = "none";
-        previewFrame.src = src;
-        previewModal.classList.add('active');
-        document.body.style.overflow = 'hidden';
-    }
-    function closeModal() {
-        previewModal.classList.remove('active');
-        previewFrame.src = "";
-        document.body.style.overflow = 'auto';
-    }
-    option1Btn.addEventListener('click', function() { openModal("HTML Editor", "https://9112000.github.io/RealPega/index2.html"); });
-    option2Btn.addEventListener('click', function() { openModal("Github Profile", "https://9112000.github.io/RealPega/index3.html"); });
-    chatBtn.addEventListener('click', function() { openModal("Chat", "https://realpegachat.onrender.com/dash"); });
-    closePreviewModal.addEventListener('click', closeModal);
-    previewFrame.addEventListener('load', function() { loader.style.display = "none"; previewFrame.style.display = "block"; });
-    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeModal(); });
-    if (window.Telegram?.WebApp) {
-        const tg = Telegram.WebApp;
-        tg.ready();
-        const modalHeader = document.querySelector('.modal-header');
-        if (modalHeader) modalHeader.style.display = 'none';
-        tg.BackButton.show();
-        tg.BackButton.onClick(closeModal);
-    }
-});
-</script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if we're in Telegram Web App
+            const isTelegramWebApp = window.Telegram?.WebApp?.initData !== undefined;
+            
+            // Apply Telegram Web App specific styles
+            if (isTelegramWebApp) {
+                document.body.classList.add('tg-webapp');
+                document.getElementById('modalHeader').style.display = 'none';
+            }
+            
+            const option1Btn = document.getElementById('option1Btn');
+            const option2Btn = document.getElementById('option2Btn');
+            const chatBtn = document.getElementById('chatBtn');
+            const previewModal = document.getElementById('previewModal');
+            const closePreviewModal = document.getElementById('closePreviewModal');
+            const previewFrame = document.getElementById('preview-frame');
+            const modalTitle = document.getElementById('modalTitle');
+            const loader = document.getElementById('loader');
+            const modalHeader = document.getElementById('modalHeader');
+            
+            function openModal(title, src) {
+                modalTitle.textContent = title;
+                loader.style.display = "block";
+                previewFrame.style.display = "none";
+                previewFrame.src = src;
+                previewModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                
+                // Show Telegram back button if in Web App
+                if (isTelegramWebApp) {
+                    const tg = Telegram.WebApp;
+                    tg.BackButton.show();
+                    tg.BackButton.onClick(closeModal);
+                }
+            }
+            
+            function closeModal() {
+                previewModal.classList.remove('active');
+                previewFrame.src = "";
+                document.body.style.overflow = 'auto';
+                
+                // Hide Telegram back button if in Web App
+                if (isTelegramWebApp) {
+                    Telegram.WebApp.BackButton.hide();
+                }
+            }
+            
+            option1Btn.addEventListener('click', function() { 
+                openModal("HTML Editor", "https://9112000.github.io/RealPega/index2.html"); 
+            });
+            
+            option2Btn.addEventListener('click', function() { 
+                openModal("Github Profile", "https://9112000.github.io/RealPega/index3.html"); 
+            });
+            
+            chatBtn.addEventListener('click', function() { 
+                openModal("Chat", "https://realpegachat.onrender.com/dash"); 
+            });
+            
+            closePreviewModal.addEventListener('click', closeModal);
+            
+            previewFrame.addEventListener('load', function() { 
+                loader.style.display = "none"; 
+                previewFrame.style.display = "block"; 
+            });
+            
+            document.addEventListener('keydown', function(e) { 
+                if (e.key === 'Escape') closeModal(); 
+            });
+            
+            // Initialize Telegram Web App if available
+            if (isTelegramWebApp) {
+                const tg = Telegram.WebApp;
+                tg.ready();
+                tg.expand(); // Expand the Web App to full height
+                
+                // Hide the modal header in Telegram Web App
+                modalHeader.style.display = 'none';
+                
+                // Initially hide the back button
+                tg.BackButton.hide();
+            }
+        });
+    </script>
 </body>
 </html>
