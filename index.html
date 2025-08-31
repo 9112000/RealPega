@@ -182,60 +182,46 @@
         </div>
     </div>
 
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const option1Btn = document.getElementById('option1Btn');
-            const option2Btn = document.getElementById('option2Btn');
-            const chatBtn = document.getElementById('chatBtn');
-            const previewModal = document.getElementById('previewModal');
-            const closePreviewModal = document.getElementById('closePreviewModal');
-            const previewFrame = document.getElementById('preview-frame');
-            const modalTitle = document.getElementById('modalTitle');
-            const loader = document.getElementById('loader');
-            
-            function openModal(title, src) {
-                modalTitle.textContent = title;
-                loader.style.display = "block";
-                previewFrame.style.display = "none";
-                previewFrame.src = src;
-                previewModal.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            }
-
-            option1Btn.addEventListener('click', function() {
-                openModal("HTML Editor", "https://9112000.github.io/RealPega/index2.html");
-            });
-            
-            option2Btn.addEventListener('click', function() {
-                openModal("Github Profile", "https://9112000.github.io/RealPega/index3.html");
-            });
-
-            chatBtn.addEventListener('click', function() {
-                openModal("Chat", "https://realpegachat.onrender.com/dash");
-            });
-
-            closePreviewModal.addEventListener('click', function() {
-                closeModal();
-            });
-
-            // Hide loader when iframe loads
-            previewFrame.addEventListener('load', function() {
-                loader.style.display = "none";
-                previewFrame.style.display = "block";
-            });
-
-            function closeModal() {
-                previewModal.classList.remove('active');
-                previewFrame.src = "";
-                document.body.style.overflow = 'auto';
-            }
-
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') {
-                    closeModal();
-                }
-            });
-        });
-    </script>
+document.addEventListener('DOMContentLoaded', function() {
+    const option1Btn = document.getElementById('option1Btn');
+    const option2Btn = document.getElementById('option2Btn');
+    const chatBtn = document.getElementById('chatBtn');
+    const previewModal = document.getElementById('previewModal');
+    const closePreviewModal = document.getElementById('closePreviewModal');
+    const previewFrame = document.getElementById('preview-frame');
+    const modalTitle = document.getElementById('modalTitle');
+    const loader = document.getElementById('loader');
+    function openModal(title, src) {
+        modalTitle.textContent = title;
+        loader.style.display = "block";
+        previewFrame.style.display = "none";
+        previewFrame.src = src;
+        previewModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeModal() {
+        previewModal.classList.remove('active');
+        previewFrame.src = "";
+        document.body.style.overflow = 'auto';
+    }
+    option1Btn.addEventListener('click', function() { openModal("HTML Editor", "https://9112000.github.io/RealPega/index2.html"); });
+    option2Btn.addEventListener('click', function() { openModal("Github Profile", "https://9112000.github.io/RealPega/index3.html"); });
+    chatBtn.addEventListener('click', function() { openModal("Chat", "https://realpegachat.onrender.com/dash"); });
+    closePreviewModal.addEventListener('click', closeModal);
+    previewFrame.addEventListener('load', function() { loader.style.display = "none"; previewFrame.style.display = "block"; });
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeModal(); });
+    if (window.Telegram?.WebApp) {
+        const tg = Telegram.WebApp;
+        tg.ready();
+        const modalHeader = document.querySelector('.modal-header');
+        if (modalHeader) modalHeader.style.display = 'none';
+        tg.BackButton.show();
+        tg.BackButton.onClick(closeModal);
+    }
+});
+</script>
 </body>
 </html>
