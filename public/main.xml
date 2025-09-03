@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Websites>
   <Website id="1">
-    <Name>Realpega Editor</Name>
+    <Name>Code Editor</Name>
     <Filename>i.html</Filename>
     <HTML><![CDATA[
 <!DOCTYPE html>
