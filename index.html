@@ -51,104 +51,81 @@
 
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', async function() {
-      const isTelegramWebApp = window.Telegram?.WebApp?.initData !== undefined;
-      if (isTelegramWebApp) {
-        document.body.classList.add('tg-webapp');
-        document.getElementById('modalHeader').style.display = 'none';
+  document.addEventListener('DOMContentLoaded', async function() {
+  const isTelegramWebApp = window.Telegram?.WebApp?.initData !== undefined;
+  if (isTelegramWebApp) {
+    document.body.classList.add('tg-webapp');
+    document.getElementById('modalHeader').style.display = 'none';
+  }
+
+  const previewModal = document.getElementById('previewModal');
+  const closePreviewModal = document.getElementById('closePreviewModal');
+  const previewFrame = document.getElementById('preview-frame');
+  const modalTitle = document.getElementById('modalTitle');
+  const loader = document.getElementById('loader');
+  const modalHeader = document.getElementById('modalHeader');
+  const buttonsContainer = document.getElementById('buttons');
+
+  function openModal(title, src) {
+    modalTitle.textContent = title;
+    loader.style.display = "block";
+    previewFrame.style.display = "none";
+    previewFrame.src = src;
+    previewModal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    if (isTelegramWebApp) {
+      const tg = Telegram.WebApp;
+      tg.BackButton.show();
+      tg.BackButton.onClick(closeModal);
+    }
+  }
+
+  function closeModal() {
+    previewModal.classList.remove('active');
+    previewFrame.src = "";
+    document.body.style.overflow = 'auto';
+    if (isTelegramWebApp) {
+      Telegram.WebApp.BackButton.hide();
+    }
+  }
+
+  closePreviewModal.addEventListener('click', closeModal);
+  previewFrame.addEventListener('load', () => {
+    loader.style.display = "none";
+    previewFrame.style.display = "block";
+  });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+  if (isTelegramWebApp) {
+    const tg = Telegram.WebApp;
+    tg.ready();
+    tg.expand();
+    tg.setHeaderColor("#0d1117");
+    modalHeader.style.display = 'none';
+    tg.BackButton.hide();
+  }
+
+  async function loadYamlWebsites() {
+    try {
+      const response = await fetch("application.yaml");
+      const yamlText = await response.text();
+      const data = jsyaml.load(yamlText);
+      if (data && data.websites) {
+        data.websites.forEach(site => {
+          const btn = document.createElement("button");
+          btn.className = "option-btn";
+          btn.textContent = site.name;
+          btn.onclick = () => openModal(site.name, site.url);
+          buttonsContainer.appendChild(btn);
+        });
       }
+    } catch (err) {
+      console.error("YAML load error:", err);
+    }
+  }
 
-      const previewModal = document.getElementById('previewModal');
-      const closePreviewModal = document.getElementById('closePreviewModal');
-      const previewFrame = document.getElementById('preview-frame');
-      const modalTitle = document.getElementById('modalTitle');
-      const loader = document.getElementById('loader');
-      const modalHeader = document.getElementById('modalHeader');
-      const buttonsContainer = document.getElementById('buttons');
-
-      function openModal(title, src) {
-        modalTitle.textContent = title;
-        loader.style.display = "block";
-        previewFrame.style.display = "none";
-        previewFrame.src = src;
-        previewModal.classList.add('active');
-        document.body.style.overflow = 'hidden';
-        if (isTelegramWebApp) {
-          const tg = Telegram.WebApp;
-          tg.BackButton.show();
-          tg.BackButton.onClick(closeModal);
-        }
-      }
-
-      function closeModal() {
-        previewModal.classList.remove('active');
-        previewFrame.src = "";
-        document.body.style.overflow = 'auto';
-        if (isTelegramWebApp) {
-          Telegram.WebApp.BackButton.hide();
-        }
-      }
-
-      closePreviewModal.addEventListener('click', closeModal);
-      previewFrame.addEventListener('load', () => {
-        loader.style.display = "none";
-        previewFrame.style.display = "block";
-      });
-      document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
-
-      if (isTelegramWebApp) {
-        const tg = Telegram.WebApp;
-        tg.ready();
-        tg.expand();
-        tg.setHeaderColor("#0d1117");
-        modalHeader.style.display = 'none';
-        tg.BackButton.hide();
-      }
-
-      // --- Load YAML Websites (Chat, AI) ---
-      async function loadYamlWebsites() {
-        try {
-          const response = await fetch("lib/application.yaml");
-          const yamlText = await response.text();
-          const data = jsyaml.load(yamlText);
-          if (data && data.websites) {
-            data.websites.forEach(site => {
-              const btn = document.createElement("button");
-              btn.className = "option-btn";
-              btn.textContent = site.name;
-              btn.onclick = () => openModal(site.name, site.url);
-              buttonsContainer.appendChild(btn);
-            });
-          }
-        } catch (err) { console.error("YAML load error:", err); }
-      }
-
-      // --- Load XML Websites (Editor, GitHub Profile) ---
-      async function loadXmlWebsites() {
-        try {
-          const response = await fetch("public/main.xml");
-          const xmlText = await response.text();
-          const parser = new DOMParser();
-          const xmlDoc = parser.parseFromString(xmlText, "application/xml");
-          const websites = xmlDoc.getElementsByTagName("Website");
-
-          for (let site of websites) {
-            const name = site.getElementsByTagName("Name")[0]?.textContent;
-            const filename = site.getElementsByTagName("Filename")[0]?.textContent;
-            if (name && filename) {
-              const btn = document.createElement("button");
-              btn.className = "option-btn";
-              btn.textContent = name;
-              btn.onclick = () => openModal(name, filename);
-              buttonsContainer.appendChild(btn);
-            }
-          }
-        } catch (err) { console.error("XML load error:", err); }
-      }
-
-      await loadYamlWebsites();
-      await loadXmlWebsites();
-    });
+  await loadYamlWebsites();
+});
   </script>
 </body>
 </html>
