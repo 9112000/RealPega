@@ -1,4 +1,10 @@
 websites:
+  - name: "Editor"
+    url: "https://9112000.github.io/RealPega/public/App.html"
+
+  - name: "GitHub Profile"
+    url: "https://9112000.github.io/RealPega/public/Main.html"
+
   - name: "Chat"
     url: "https://realpegachat.onrender.com/dash"
 
