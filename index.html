@@ -1,9 +1,8 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>RealPega</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
@@ -41,7 +40,7 @@
 
   <div class="modal" id="previewModal">
     <div class="modal-header" id="modalHeader">
-      <div class="modal-title" id="modalTitle">Preview</div>
+      <div class="modal-title" id="modalTitle"></div>
       <button class="modal-close" id="closePreviewModal">&times;</button>
     </div>
     <div class="preview-wrapper">
@@ -109,7 +108,7 @@
       // --- Load YAML Websites (Chat, AI) ---
       async function loadYamlWebsites() {
         try {
-          const response = await fetch("/lib/application.yaml");
+          const response = await fetch("lib/application.yaml");
           const yamlText = await response.text();
           const data = jsyaml.load(yamlText);
           if (data && data.websites) {
@@ -127,7 +126,7 @@
       // --- Load XML Websites (Editor, GitHub Profile) ---
       async function loadXmlWebsites() {
         try {
-          const response = await fetch("/public/main.xml");
+          const response = await fetch("public/main.xml");
           const xmlText = await response.text();
           const parser = new DOMParser();
           const xmlDoc = parser.parseFromString(xmlText, "application/xml");
@@ -140,7 +139,7 @@
               const btn = document.createElement("button");
               btn.className = "option-btn";
               btn.textContent = name;
-              btn.onclick = () => openModal(name, filename); // local file
+              btn.onclick = () => openModal(name, filename);
               buttonsContainer.appendChild(btn);
             }
           }
