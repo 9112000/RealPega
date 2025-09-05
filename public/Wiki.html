@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #0d1117;
+            color: #c9d1d9;
+            -webkit-tap-highlight-color: transparent;
+            overscroll-behavior: none;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .search-section {
+            padding: 15px;
+            background: #0d1117;
+            border-radius: 6px;
+            border: 1px solid #30363d;
+            margin-bottom: 20px;
+        }
+        
+        .search-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .search-container {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 10px 14px;
+            border-radius: 0px;
+            background: #0d1117;
+            color: #c9d1d9;
+            outline: none;
+            border: none;
+            font-size: 16px;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        .results-section {
+            display: none;
+            padding: 15px;
+            background: #0d1117;
+            border-radius: 6px;
+            border: 1px solid #30363d;
+            margin-bottom: 20px;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .results-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .results-count {
+            font-size: 14px;
+            color: #8b949e;
+            font-weight: normal;
+        }
+        
+        .results-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .result-item {
+            padding: 15px;
+            background: transparent;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .result-item:hover {
+            color: rgba(31, 111, 234);
+        }
+        
+        .result-item:active {
+            transform: scale(0.98);
+        }
+        
+        .result-item-title {
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: rgba(31, 111, 234);
+            font-size: 18px;
+        }
+        
+        .result-item-description {
+            font-size: 14px;
+            color: #8b949e;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .result-item-meta {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+            font-size: 12px;
+            color: #0969da;
+        }
+
+        /* Article Section */
+        .article-section {
+            display: none;
+            padding: 20px;
+            background: #0d1117;
+            border-radius: 6px;
+            border: 1px solid #30363d;
+            margin-bottom: 20px;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .article-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+        
+        .article-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: rgba(31, 111, 234);
+            margin-bottom: 10px;
+        }
+        
+        .article-image {
+            width: 300px;
+            border-radius: 8px;
+            border: none;
+            margin-left: 20px;
+        }
+        
+        .article-content {
+            margin-bottom: 25px;
+        }
+        
+        .article-content p {
+            margin-bottom: 16px;
+        }
+        
+        .article-content h2 {
+            font-size: 22px;
+            margin: 25px 0 15px 0;
+            color: rgba(31, 111, 234);
+            border-bottom: 1px solid #30363d;
+            padding-bottom: 5px;
+        }
+        
+        .article-content h3 {
+            font-size: 18px;
+            margin: 20px 0 12px 0;
+            color: rgba(31, 111, 234);
+        }
+        
+        .article-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: #161b22;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        
+        .article-content th, .article-content td {
+            border: 1px solid #30363d;
+            padding: 10px 12px;
+            text-align: left;
+        }
+        
+        .article-content th {
+            background: #1c2129;
+            color: white;
+            font-weight: 500;
+        }
+        
+        .article-content tr:nth-child(even) {
+            background: #161b22;
+        }
+        
+        .article-content tr:hover {
+            background: #1c2129;
+        }
+        
+        .article-content ul, .article-content ol {
+            margin: 15px 0;
+            padding-left: 25px;
+        }
+        
+        .article-content li {
+            margin-bottom: 8px;
+        }
+        
+        .article-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 1px solid #30363d;
+        }
+        
+        .back-btn {
+            padding: 10px 16px;
+            border-radius: 6px;
+            background: rgba(35, 134, 54);
+            color: white;
+            border: 1px solid rgba(69, 152, 84);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .back-btn:hover {
+            opacity: 0.8;
+        }
+        
+        .back-btn:active {
+            transform: scale(0.95);
+        }
+
+        .loader {
+            display: none;
+            text-align: center;
+            padding: 30px;
+        }
+        
+        .loader-text {
+            color: #8b949e;
+        }
+
+        /* Error Message */
+        .error-message {
+            display: none;
+            padding: 20px;
+            background: #3d1d23;
+            border: none;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            color: #f85149;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .error-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .article-header {
+                flex-direction: column;
+            }
+            
+            .article-image {
+                width: 100%;
+                margin: 20px 0 0 0;
+            }
+            
+            .article-footer {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="search-section">
+            <div class="search-container">
+                <input type="text" class="search-input" id="searchInput" placeholder="Search Wiki">
+            </div>
+        </div>
+        
+        <div class="error-message" id="errorMessage">
+            <div class="error-title">
+                <i class="fas fa-exclamation-circle"></i>
+                <span>Error</span>
+            </div>
+            <div id="errorText">Unable to load articles. Please try again.</div>
+        </div>
+        
+        <div class="loader" id="loader">
+            <div class="loader-text">Searching</div>
+        </div>
+        
+        <div class="results-section" id="resultsSection">
+            <div class="results-title">
+            </div>
+            <div class="results-list" id="resultsList">
+                <!-- Results will be added here -->
+            </div>
+        </div>
+        
+        <div class="article-section" id="articleSection">
+            <div class="article-header">
+                <div>
+                    <h1 class="article-title" id="articleTitle"></h1>
+                    <div id="articleDescription"></div>
+                </div>
+                <img class="article-image" id="articleImage" src="" alt="">
+            </div>
+            
+            <div class="article-content" id="articleContent"></div>
+            
+            <div class="article-footer">
+                <button class="back-btn" id="backToResultsBtn">Back to Results</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elements
+            const searchInput = document.getElementById('searchInput');
+            const searchBtn = document.getElementById('searchBtn');
+            const resultsSection = document.getElementById('resultsSection');
+            const resultsList = document.getElementById('resultsList');
+            const resultsCount = document.getElementById('resultsCount');
+            const articleSection = document.getElementById('articleSection');
+            const articleTitle = document.getElementById('articleTitle');
+            const articleDescription = document.getElementById('articleDescription');
+            const articleImage = document.getElementById('articleImage');
+            const articleContent = document.getElementById('articleContent');
+            const backToResultsBtn = document.getElementById('backToResultsBtn');
+            const backToSearchBtn = document.getElementById('backToSearchBtn');
+            const loader = document.getElementById('loader');
+            const errorMessage = document.getElementById('errorMessage');
+            const errorText = document.getElementById('errorText');
+            
+            // Store search results
+            let currentResults = [];
+            
+            // Initialize the app
+            function init() {
+                // Focus on search input
+                searchInput.focus();
+            }
+            
+            // Search Wikipedia
+            async function searchWikipedia(searchTerm) {
+                // Show loader, hide error and previous results
+                loader.style.display = 'block';
+                errorMessage.style.display = 'none';
+                resultsSection.style.display = 'none';
+                articleSection.style.display = 'none';
+                
+                try {
+                    // Wikipedia API URL for search
+                    const url = `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(searchTerm)}&format=json&origin=*&utf8=&srlimit=10`;
+                    
+                    const response = await fetch(url);
+                    
+                    if (!response.ok) {
+                        throw new Error('Search failed');
+                    }
+                    
+                    const data = await response.json();
+                    
+                    // Display search results
+                    displaySearchResults(data.query.search, searchTerm);
+                    
+                } catch (error) {
+                    showError(error.message || 'Unable to search Wikipedia. Please try again.');
+                } finally {
+                    loader.style.display = 'none';
+                }
+            }
+            
+            // Display search results
+            function displaySearchResults(results, searchTerm) {
+                currentResults = results;
+                
+                // Clear previous results
+                resultsList.innerHTML = '';
+                
+                if (results.length === 0) {
+                    resultsList.innerHTML = `
+                        <div style="padding: 20px; text-align: center; color: #8b949e;">
+                            <i class="fas fa-search" style="font-size: 24px; margin-bottom: 10px;"></i>
+                            <div>No results found for "${searchTerm}"</div>
+                        </div>
+                    `;
+                } else {
+                    results.forEach((result, index) => {
+                        const resultItem = document.createElement('div');
+                        resultItem.className = 'result-item';
+                        resultItem.innerHTML = `
+                            <div class="result-item-title">${result.title}</div>
+                            <div class="result-item-description">${result.snippet}...</div>
+                            <div class="result-item-meta">
+                                <span>Word count: ${result.wordcount}</span>
+                                <span>Size: ${Math.round(result.size/1000)}KB</span>
+                            </div>
+                        `;
+                        
+                        resultItem.addEventListener('click', () => {
+                            fetchArticle(result.title);
+                        });
+                        
+                        resultsList.appendChild(resultItem);
+                    });
+                }
+                
+                // Show results section
+                resultsSection.style.display = 'block';
+            }
+            
+            // Fetch Wikipedia article
+            async function fetchArticle(title) {
+                // Show loader, hide error
+                loader.style.display = 'block';
+                errorMessage.style.display = 'none';
+                resultsSection.style.display = 'none';
+                
+                try {
+                    // Wikipedia API URL for page content
+                    const url = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title)}`;
+                    
+                    const response = await fetch(url);
+                    
+                    if (!response.ok) {
+                        throw new Error('Article not found');
+                    }
+                    
+                    const data = await response.json();
+                    
+                    // Display the article
+                    displayArticle(data);
+                    
+                } catch (error) {
+                    showError(error.message || 'Unable to fetch article. Please try again.');
+                } finally {
+                    loader.style.display = 'none';
+                }
+            }
+            
+            // Display article
+            function displayArticle(data) {
+                // Set article content
+                articleTitle.textContent = data.title;
+                articleDescription.textContent = data.description || '';
+                articleImage.src = data.originalimage ? data.originalimage.source : '';
+                articleImage.style.display = data.originalimage ? 'block' : 'none';
+                
+                // Parse and display extract with basic formatting
+                const extract = data.extract;
+                let formattedExtract = extract;
+                
+                // Simple formatting for sections (headings)
+                formattedExtract = formattedExtract.replace(/===(.*?)===/g, '<h3>$1</h3>');
+                formattedExtract = formattedExtract.replace(/==(.*?)==/g, '<h2>$1</h2>');
+                
+                // Format lists
+                formattedExtract = formattedExtract.replace(/\n\*(.*?)(?=\n[^∗]|$)/g, '<ul><li>$1</li></ul>');
+                formattedExtract = formattedExtract.replace(/<\/ul><ul>/g, '');
+                
+                // Format links (simple approximation)
+                formattedExtract = formattedExtract.replace(/\[\[(.*?)\]\]/g, '<strong>$1</strong>');
+
+                if (data.title.toLowerCase().includes('country') || 
+                    data.title.toLowerCase().includes('language') ||
+                    data.title.toLowerCase().includes('planet')) {
+                    formattedExtract += `
+                        <h2>Summary</h2>
+                        <table>
+                            <tr>
+                                <th>Attribute</th>
+                                <th>Value</th>
+                            </tr>
+                            <tr>
+                                <td>Title</td>
+                                <td>${data.title}</td>
+                            </tr>
+                            <tr>
+                                <td>Description</td>
+                                <td>${data.description || 'N/A'}</td>
+                            </tr>
+                            <tr>
+                                <td>Type</td>
+                                <td>Wikipedia Article</td>
+                            </tr>
+                        </table>
+                    `;
+                }
+                
+                articleContent.innerHTML = formattedExtract;
+                
+                // Show article section
+                articleSection.style.display = 'block';
+            }
+            
+            // Show error message
+            function showError(message) {
+                errorText.textContent = message;
+                errorMessage.style.display = 'block';
+            }
+            
+            searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    const searchTerm = searchInput.value.trim();
+                    if (searchTerm) {
+                        searchWikipedia(searchTerm);
+                    }
+                }
+            });
+            
+            backToResultsBtn.addEventListener('click', () => {
+                articleSection.style.display = 'none';
+                resultsSection.style.display = 'block';
+            });
+            
+            backToSearchBtn.addEventListener('click', () => {
+                articleSection.style.display = 'none';
+                resultsSection.style.display = 'none';
+                searchInput.value = '';
+                searchInput.focus();
+            });
+
+            init();
+        });
+    </script>
+</body>
+</html>
