@@ -168,10 +168,11 @@
         <div class="options-section">
             <div class="options-title">Choose application</div><br>
             <div class="option-buttons">
-                <button class="option-btn" id="option1Btn">HTML Editor</button>
-                <button class="option-btn" id="option2Btn">Github</button>
-                <button class="option-btn" id="chatBtn">Chat</button>
-                <button class="option-btn" id="aiBtn">AI</button>
+                <button class="option-btn" id="b1">HTML Editor</button>
+                <button class="option-btn" id="b2">Github</button>
+                <button class="option-btn" id="b3">Chat</button>
+                <button class="option-btn" id="b4">AI</button>
+                <button class="option-btn" id="b5">Wiki</button>
             </div>
         </div>
     </div>
@@ -229,25 +230,28 @@
                 previewFrame.src = "";
                 document.body.style.overflow = 'auto';
                 
-                // Hide Telegram back button if in Web App
                 if (isTelegramWebApp) {
                     Telegram.WebApp.BackButton.hide();
                 }
             }
             
-            option1Btn.addEventListener('click', function() {
+            b1.addEventListener('click', function() {
                 openModal("HTML Editor", "https://9112000.github.io/RealPega/public/App.html");
             });
             
-            option2Btn.addEventListener('click', function() {
+            b2.addEventListener('click', function() {
                 openModal("Github Profile", "https://9112000.github.io/RealPega/public/Main.html");
             });
 
-            chatBtn.addEventListener('click', function() {
+            b3.addEventListener('click', function() {
                 openModal("Chat", "https://realpegachat.onrender.com/dash");
             });
-            aiBtn.addEventListener('click', function() {
+            b4.addEventListener('click', function() {
                 openModal("AI", "https://dat-sepia.vercel.app");
+            });
+            
+            b5.addEventListener('click', function() {
+                openModal("Wiki", "https://9112000.github.io/RealPega/public/Wiki.html");
             });
             
             closePreviewModal.addEventListener('click', closeModal);
