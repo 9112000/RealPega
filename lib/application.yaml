@@ -1,12 +1,21 @@
 websites:
   - name: "Editor"
-    url: "https://9112000.github.io/RealPega/public/App.html"
+    path: "/RealPega/public/App.html"
+    domain: "9112000.github.io"
 
   - name: "GitHub Profile"
-    url: "https://9112000.github.io/RealPega/public/Main.html"
+    path: "/RealPega/public/Main.html"
+    domain: "https://9112000.github.io"
 
   - name: "Chat"
-    url: "https://realpegachat.onrender.com/dash"
+    path: "/dash"
+    domain: "realpegachat.onrender.com"
 
   - name: "AI"
-    url: "https://dat-sepia.vercel.app/"
+    path: "/"
+    domain: "dat-sepia.vercel.app"    
+    
+ - name: "Wiki"
+    path: "/RealPega/public/Wiki.html
+    domain: "9112000.github.io"
+    
