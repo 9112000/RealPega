@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -22,16 +22,14 @@
         }
 
         .container {
-            max-width: 1280px;
+            max-width: 100%;
             margin: 0 auto;
             padding: 20px;
         }
 
         .search-section {
-            padding: 15px;
-            background: #0d1117;
+            background: transparent;
             border-radius: 6px;
-            border: 1px solid #30363d;
             margin-bottom: 20px;
         }
         
@@ -46,32 +44,34 @@
         }
         
         .search-input {
-            flex: 1;
-            padding: 10px 14px;
-            border-radius: 0px;
-            background: #0d1117;
+            width: 100%;
+            padding: 15px !important;
+            border-radius: 6px;
+            background: transparent;
             color: #c9d1d9;
             outline: none;
-            border: none;
+            border: 1px solid #30363d;
             font-size: 16px;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            resize: none;
+            cursor: pointer;
+            min-height: 50px;
         }
+        
         .results-section {
             display: none;
-            padding: 15px;
-            background: #0d1117;
+            background: transparent;
             border-radius: 6px;
-            border: 1px solid #30363d;
             margin-bottom: 20px;
             animation: fadeIn 0.5s ease;
         }
         
         .results-title {
             font-weight: 600;
-            margin-bottom: 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-bottom: 15px;
         }
         
         .results-count {
@@ -89,16 +89,13 @@
         .result-item {
             padding: 15px;
             background: transparent;
+            border: 1px solid #30363d;
             border-radius: 6px;
-            border: none;
             cursor: pointer;
             transition: all 0.2s;
         }
         
-        .result-item:hover {
-            color: rgba(31, 111, 234);
-        }
-        
+
         .result-item:active {
             transform: scale(0.98);
         }
@@ -128,21 +125,18 @@
             color: #0969da;
         }
 
-        /* Article Section */
         .article-section {
             display: none;
-            padding: 20px;
-            background: #0d1117;
+            padding: 0;
+            background: transparent;
             border-radius: 6px;
-            border: 1px solid #30363d;
             margin-bottom: 20px;
             animation: fadeIn 0.5s ease;
         }
         
         .article-header {
             display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
+            flex-direction: column;
             margin-bottom: 20px;
         }
         
@@ -154,14 +148,17 @@
         }
         
         .article-image {
-            width: 300px;
+            width: 100%;
+            max-width: 400px;
             border-radius: 8px;
             border: none;
-            margin-left: 20px;
+            margin: 20px 0;
+            align-self: center;
         }
         
         .article-content {
             margin-bottom: 25px;
+            line-height: 1.7;
         }
         
         .article-content p {
@@ -187,6 +184,7 @@
             border-collapse: collapse;
             margin: 20px 0;
             background: #161b22;
+            color: #989292 !important;
             border-radius: 6px;
             overflow: hidden;
         }
@@ -226,6 +224,7 @@
             align-items: center;
             padding-top: 15px;
             border-top: 1px solid #30363d;
+            margin-top: 30px;
         }
         
         .back-btn {
@@ -256,7 +255,7 @@
             color: #8b949e;
         }
 
-        /* Error Message */
+        /* if error */
         .error-message {
             display: none;
             padding: 20px;
@@ -275,8 +274,6 @@
             align-items: center;
             gap: 8px;
         }
-
-        /* Animations */
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
@@ -287,21 +284,30 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
+        @media (min-width: 768px) {
+            .container {
+                max-width: 90%;
+            }
+            
             .article-header {
-                flex-direction: column;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: flex-start;
             }
             
             .article-image {
-                width: 100%;
-                margin: 20px 0 0 0;
+                width: 300px;
+                margin: 0 0 0 20px;
             }
             
             .article-footer {
-                flex-direction: column;
-                gap: 15px;
-                align-items: flex-start;
+                flex-direction: row;
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .container {
+                max-width: 1100px;
             }
         }
     </style>
@@ -310,7 +316,7 @@
     <div class="container">
         <div class="search-section">
             <div class="search-container">
-                <input type="text" class="search-input" id="searchInput" placeholder="Search Wiki">
+                <textarea class="search-input" id="searchInput" placeholder="Search Wikipedia." rows="1"></textarea>
             </div>
         </div>
         
@@ -323,14 +329,15 @@
         </div>
         
         <div class="loader" id="loader">
-            <div class="loader-text">Searching</div>
+            <div class="loader-text">Searching...</div>
         </div>
         
         <div class="results-section" id="resultsSection">
             <div class="results-title">
+                <span></span>
+                <span class="results-count" id="resultsCount"></span>
             </div>
             <div class="results-list" id="resultsList">
-                <!-- Results will be added here -->
             </div>
         </div>
         
@@ -353,9 +360,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Elements
             const searchInput = document.getElementById('searchInput');
-            const searchBtn = document.getElementById('searchBtn');
             const resultsSection = document.getElementById('resultsSection');
             const resultsList = document.getElementById('resultsList');
             const resultsCount = document.getElementById('resultsCount');
@@ -365,7 +370,6 @@
             const articleImage = document.getElementById('articleImage');
             const articleContent = document.getElementById('articleContent');
             const backToResultsBtn = document.getElementById('backToResultsBtn');
-            const backToSearchBtn = document.getElementById('backToSearchBtn');
             const loader = document.getElementById('loader');
             const errorMessage = document.getElementById('errorMessage');
             const errorText = document.getElementById('errorText');
@@ -377,6 +381,12 @@
             function init() {
                 // Focus on search input
                 searchInput.focus();
+                
+                // Auto-resize textarea
+                searchInput.addEventListener('input', function() {
+                    this.style.height = 'auto';
+                    this.style.height = (this.scrollHeight) + 'px';
+                });
             }
             
             // Search Wikipedia
@@ -443,7 +453,7 @@
                         resultsList.appendChild(resultItem);
                     });
                 }
-                
+            
                 // Show results section
                 resultsSection.style.display = 'block';
             }
@@ -456,8 +466,8 @@
                 resultsSection.style.display = 'none';
                 
                 try {
-                    // Wikipedia API URL for page content
-                    const url = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title)}`;
+                    // Use the REST API to get the full article content
+                    const url = `https://en.wikipedia.org/api/rest_v1/page/html/${encodeURIComponent(title)}`;
                     
                     const response = await fetch(url);
                     
@@ -465,20 +475,116 @@
                         throw new Error('Article not found');
                     }
                     
-                    const data = await response.json();
+                    const htmlContent = await response.text();
                     
                     // Display the article
-                    displayArticle(data);
+                    displayArticle(title, htmlContent);
                     
                 } catch (error) {
-                    showError(error.message || 'Unable to fetch article. Please try again.');
+                    // Fallback to summary if full article fails
+                    try {
+                        const summaryUrl = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title)}`;
+                        const summaryResponse = await fetch(summaryUrl);
+                        
+                        if (!summaryResponse.ok) {
+                            throw new Error('Article not found');
+                        }
+                        
+                        const data = await summaryResponse.json();
+                        displayArticleSummary(data);
+                    } catch (fallbackError) {
+                        showError(fallbackError.message || 'Unable to fetch article. Please try again.');
+                    }
                 } finally {
                     loader.style.display = 'none';
                 }
             }
             
-            // Display article
-            function displayArticle(data) {
+            // Display full article
+            function displayArticle(title, htmlContent) {
+                // Set article content
+                articleTitle.textContent = title;
+                articleDescription.textContent = '';
+                articleImage.src = '';
+                articleImage.style.display = 'none';
+                
+                // Clean up the Wikipedia HTML
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = htmlContent;
+                
+                // Remove edit buttons and other unnecessary elements
+                const editSections = tempDiv.querySelectorAll('.mw-editsection');
+                editSections.forEach(el => el.remove());
+                
+                // Remove reference sup elements
+                const referenceLinks = tempDiv.querySelectorAll('sup.reference');
+                referenceLinks.forEach(el => el.remove());
+                
+                // Remove table of contents
+                const toc = tempDiv.querySelector('#toc');
+                if (toc) toc.remove();
+                
+                // Remove infobox if it exists and extract image
+                const infobox = tempDiv.querySelector('.infobox');
+                if (infobox) {
+                    const infoboxImg = infobox.querySelector('img');
+                    if (infoboxImg && infoboxImg.src) {
+                        articleImage.src = infoboxImg.src;
+                        articleImage.style.display = 'block';
+                        infoboxImg.parentNode.removeChild(infoboxImg);
+                    }
+                    // Keep the infobox content for display
+                }
+                
+                // Apply our styles to tables
+                const tables = tempDiv.querySelectorAll('table');
+                tables.forEach(table => {
+                    table.style.width = '100%';
+                    table.style.borderCollapse = 'collapse';
+                    table.style.margin = '20px 0';
+                    table.style.background = '#161b22';
+                    table.style.borderRadius = '6px';
+                    table.style.overflow = 'hidden';
+                    
+                    const ths = table.querySelectorAll('th');
+                    ths.forEach(th => {
+                        th.style.background = '#1c2129';
+                        th.style.color = 'white';
+                        th.style.fontWeight = '500';
+                        th.style.border = '1px solid #30363d';
+                        th.style.padding = '10px 12px';
+                    });
+                    
+                    const tds = table.querySelectorAll('td');
+                    tds.forEach(td => {
+                        td.style.border = '1px solid #30363d';
+                        td.style.padding = '10px 12px';
+                    });
+                    
+                    const trs = table.querySelectorAll('tr');
+                    trs.forEach((tr, index) => {
+                        if (index % 2 === 0) {
+                            tr.style.background = '#161b22';
+                        }
+                    });
+                });
+                
+                // Style links
+                const links = tempDiv.querySelectorAll('a');
+                links.forEach(link => {
+                    link.style.color = '#58a6ff';
+                    link.target = '_blank';
+                });
+                
+                // Set the content
+                articleContent.innerHTML = tempDiv.innerHTML;
+                
+                // Show article section
+                articleSection.style.display = 'block';
+            }
+            
+            // Display article summary (fallback)
+            function displayArticleSummary(data) {
                 // Set article content
                 articleTitle.textContent = data.title;
                 articleDescription.textContent = data.description || '';
@@ -539,7 +645,8 @@
             }
             
             searchInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
                     const searchTerm = searchInput.value.trim();
                     if (searchTerm) {
                         searchWikipedia(searchTerm);
@@ -550,13 +657,6 @@
             backToResultsBtn.addEventListener('click', () => {
                 articleSection.style.display = 'none';
                 resultsSection.style.display = 'block';
-            });
-            
-            backToSearchBtn.addEventListener('click', () => {
-                articleSection.style.display = 'none';
-                resultsSection.style.display = 'none';
-                searchInput.value = '';
-                searchInput.focus();
             });
 
             init();
