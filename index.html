@@ -1,278 +1,32 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>RealPega</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-        }
-        
-        body {
-            background-color: #0d1117;
-            color: #c9d1d9;
-            -webkit-tap-highlight-color: transparent;
-            overscroll-behavior: none;
-        }
-        .container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0;
-            border-bottom: none;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 24px;
-            font-weight: 600;
-        }
-
-        /* Options Section Styles*/
-        .options-section {
-            padding: 15px;
-            background: #0d1117;
-            border-radius: 6px;
-            border: 1px solid #30363d;
-        }
-        
-        .options-title {
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-        
-        .option-buttons {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        
-        .option-btn {
-            padding: 8px 16px;
-            border-radius: 6px;
-            background: rgba(35, 134, 54);
-            color: white;
-            border: 1px solid rgba(69, 152, 84);
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-        
-        .option-btn:active {
-            opacity: 0.8;
-        }
-
-        /* Full Screen Preview Styles */
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #0d1117;
-            z-index: 1000;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .modal.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        .modal-header {
-            padding: 12px 16px;
-            background: #161b22;
-            border-bottom: 1px solid #30363d;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .modal-title {
-            font-weight: 600;
-        }
-
-        .modal-close {
-            background: none;
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
-            color: #8b949e;
-            padding: 4px;
-        }
-        
-        .preview-wrapper {
-            position: relative;
-            flex: 1;
-            background: #0d1117;
-        }
-
-        .preview-content {
-            width: 100%;
-            height: 100%;
-            border: none;
-            background: #0d1117;
-            display: none; /* hide until loaded */
-        }
-
-        /* Loader */
-        .loader {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            border: 4px solid transparent;
-            border-top: 4px solid transparent;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: translate(-50%, -50%) rotate(0deg); }
-            100% { transform: translate(-50%, -50%) rotate(360deg); }
-        }
+        /* realstarexx/realpega */
+        * {margin:0;padding:0;box-sizing:border-box;font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;}
+        body {background-color:#0d1117;color:#c9d1d9;-webkit-tap-highlight-color:transparent;overscroll-behavior:none;padding:20px;}
+        .options-section {padding:15px;background:#0d1117;border-radius:6px;border:1px solid #30363d;max-width:600px;margin:auto;}
+        .options-title {font-weight:600;margin-bottom:10px;}
+        .option-buttons {display:flex;gap:10px;flex-wrap:wrap;}
+        .option-btn {padding:8px 16px;border-radius:6px;background:rgba(35,134,54);color:white;border:1px solid rgba(69,152,84);cursor:pointer;transition:background-color 0.2s;}
+        .option-btn:active {opacity:0.8;}
+        .modal {position:fixed;top:0;left:0;right:0;bottom:0;background-color:#0d1117;z-index:1000;opacity:0;pointer-events:none;transition:opacity 0.3s;display:flex;flex-direction:column;}
+        .modal.active {opacity:1;pointer-events:all;}
+        .modal-header {padding:12px 16px;background:#161b22;border-bottom:1px solid #30363d;display:flex;justify-content:space-between;align-items:center;}
+        .modal-title {font-weight:600;}
+        .modal-close {background:none;border:none;font-size:20px;cursor:pointer;color:#8b949e;padding:4px;}
+        .preview-wrapper {position:relative;flex:1;background:#0d1117;}
+        .preview-content {width:100%;height:100%;border:none;background:#0d1117;display:none;}
+        .loader {position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);border:4px solid transparent;border-top:4px solid transparent;border-radius:50%;width:40px;height:40px;animation:spin 1s linear infinite;}
+        @keyframes spin {0%{transform:translate(-50%,-50%) rotate(0deg);}100%{transform:translate(-50%,-50%) rotate(360deg);}}
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <div class="logo">
-                <span></span>
-            </div>
-        </header>
-        <div class="options-section">
-            <div class="options-title">Choose application</div><br>
-            <div class="option-buttons">
-                <button class="option-btn" id="b1">HTML Editor</button>
-                <button class="option-btn" id="b2">Github</button>
-                <button class="option-btn" id="b3">Chat</button>
-                <button class="option-btn" id="b4">AI</button>
-                <button class="option-btn" id="b5">Wiki</button>
-            </div>
-        </div>
-    </div>
-    <div class="modal" id="previewModal">
-        <div class="modal-header" id="modalHeader">
-            <div class="modal-title" id="modalTitle">Preview</div>
-            <button class="modal-close" id="closePreviewModal">&times;</button>
-        </div>
-        <div class="preview-wrapper">
-            <div class="loader" id="loader"></div>
-            <iframe class="preview-content" id="preview-frame" allowtransparency="true"></iframe>
-        </div>
-    </div>
-
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Check if we're in Telegram Web App
-            const isTelegramWebApp = window.Telegram?.WebApp?.initData !== undefined;
-            
-            // Apply Telegram Web App specific styles
-            if (isTelegramWebApp) {
-                document.body.classList.add('tg-webapp');
-                document.getElementById('modalHeader').style.display = 'none';
-            }
-            
-            const option1Btn = document.getElementById('option1Btn');
-            const option2Btn = document.getElementById('option2Btn');
-            const chatBtn = document.getElementById('chatBtn');
-            const previewModal = document.getElementById('previewModal');
-            const closePreviewModal = document.getElementById('closePreviewModal');
-            const previewFrame = document.getElementById('preview-frame');
-            const modalTitle = document.getElementById('modalTitle');
-            const loader = document.getElementById('loader');
-            const modalHeader = document.getElementById('modalHeader');
-            
-            function openModal(title, src) {
-                modalTitle.textContent = title;
-                loader.style.display = "block";
-                previewFrame.style.display = "none";
-                previewFrame.src = src;
-                previewModal.classList.add('active');
-                document.body.style.overflow = 'hidden';
-                
-                // Show Telegram back button if in Web App
-                if (isTelegramWebApp) {
-                    const tg = Telegram.WebApp;
-                    tg.BackButton.show();
-                    tg.BackButton.onClick(closeModal);
-                }
-            }
-            
-            function closeModal() {
-                previewModal.classList.remove('active');
-                previewFrame.src = "";
-                document.body.style.overflow = 'auto';
-                
-                if (isTelegramWebApp) {
-                    Telegram.WebApp.BackButton.hide();
-                }
-            }
-            
-            b1.addEventListener('click', function() {
-                openModal("HTML Editor", "https://9112000.github.io/RealPega/public/App.html");
-            });
-            
-            b2.addEventListener('click', function() {
-                openModal("Github Profile", "https://9112000.github.io/RealPega/public/Main.html");
-            });
-
-            b3.addEventListener('click', function() {
-                openModal("Chat", "https://realpegachat.onrender.com/dash");
-            });
-            b4.addEventListener('click', function() {
-                openModal("AI", "https://dat-sepia.vercel.app");
-            });
-            
-            b5.addEventListener('click', function() {
-                openModal("Wiki", "https://9112000.github.io/RealPega/public/Wiki.html");
-            });
-            
-            closePreviewModal.addEventListener('click', closeModal);
-            
-            previewFrame.addEventListener('load', function() { 
-                loader.style.display = "none"; 
-                previewFrame.style.display = "block"; 
-            });
-            
-            document.addEventListener('keydown', function(e) { 
-                if (e.key === 'Escape') closeModal(); 
-            });
-            
-            // Initialize Telegram Web App if available
-            if (isTelegramWebApp) {
-                const tg = Telegram.WebApp;
-                tg.ready();
-                tg.expand(); // Expand the Web App to full height
-                tg.setHeaderColor("#0d1117");
-                
-                // Hide the modal header in Telegram Web App
-                modalHeader.style.display = 'none';
-                
-                // Initially hide the back button
-                tg.BackButton.hide();
-            }
-        });
-    </script>
+    <script src="/src/app.js"></script>
 </body>
 </html>
