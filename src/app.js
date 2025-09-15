@@ -1,7 +1,70 @@
-document.addEventListener("DOMContentLoaded",()=>{const apps=[
-    { title:"HTML Editor", url:"https://9112000.github.io/RealPega/public/App.html" },
-    { title:"Github", url:"https://9112000.github.io/RealPega/public/Main.html" },
-    { title:"Chat", url:"https://realpegachat.onrender.com/dash" },
-    { title:"AI", url:"https://dat-sepia.vercel.app" },
-    { title:"Wiki", url:"https://9112000.github.io/RealPega/public/Wiki.html" }
-];const e=void 0!==window.Telegram?.WebApp?.initData,t=e?Telegram.WebApp:null,o=document.createElement("div");o.className="options-section",o.innerHTML=`<div class="options-title">Choose application</div><br>`;const d=document.createElement("div");d.className="option-buttons",o.appendChild(d),document.body.appendChild(o);const a=document.createElement("div");a.className="modal",a.id="previewModal",a.innerHTML=`<div class="modal-header" id="modalHeader"><div class="modal-title" id="modalTitle">Preview</div><button class="modal-close" id="closePreviewModal">&times;</button></div><div class="preview-wrapper"><div class="loader" id="loader"></div><iframe class="preview-content" id="preview-frame" allowtransparency="true"></iframe></div>`,document.body.appendChild(a);const l=a.querySelector("#modalHeader"),n=a.querySelector("#modalTitle"),r=a.querySelector("#loader"),i=a.querySelector("#preview-frame"),c=a.querySelector("#closePreviewModal");function s(o,d){n.textContent=o,r.style.display="block",i.style.display="none",i.src=d,a.classList.add("active"),document.body.style.overflow="hidden",e&&(t.BackButton.show(),t.BackButton.onClick(m))}function m(){a.classList.remove("active"),i.src="",document.body.style.overflow="auto",e&&t.BackButton.hide()}c.addEventListener("click",m),i.addEventListener("load",()=>{r.style.display="none",i.style.display="block"}),document.addEventListener("keydown",e=>{"Escape"===e.key&&m()}),apps.forEach(e=>{const t=document.createElement("button");t.className="option-btn",t.textContent=e.title,t.addEventListener("click",()=>s(e.title,e.url)),d.appendChild(t)}),e&&(t.ready(),t.expand(),t.setHeaderColor("#0d1117"),l.style.display="none",t.BackButton.hide())});
+        document.addEventListener('DOMContentLoaded', function() {
+            const isTelegramWebApp = window.Telegram?.WebApp?.initData !== undefined;
+            
+            if (isTelegramWebApp) {
+                document.body.classList.add('tg-webapp');
+                document.getElementById('modalHeader').style.display = 'none';
+            }
+            
+            const previewModal = document.getElementById('previewModal');
+            const closePreviewModal = document.getElementById('closePreviewModal');
+            const previewFrame = document.getElementById('preview-frame');
+            const modalTitle = document.getElementById('modalTitle');
+            const loader = document.getElementById('loader');
+            const modalHeader = document.getElementById('modalHeader');
+            const optionButtons = document.querySelectorAll('.option-btn');
+            
+            function openModal(title, src) {
+                modalTitle.textContent = title;
+                loader.style.display = "block";
+                previewFrame.style.display = "none";
+                previewFrame.src = src;
+                previewModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                
+                if (isTelegramWebApp) {
+                    const tg = Telegram.WebApp;
+                    tg.BackButton.show();
+                    tg.BackButton.onClick(closeModal);
+                }
+            }
+            
+            function closeModal() {
+                previewModal.classList.remove('active');
+                previewFrame.src = "";
+                document.body.style.overflow = 'auto';
+                
+                if (isTelegramWebApp) {
+                    Telegram.WebApp.BackButton.hide();
+                }
+            }
+            
+            optionButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const title = this.getAttribute('data-title');
+                    const url = this.getAttribute('data-url');
+                    openModal(title, url);
+                });
+            });
+            
+            closePreviewModal.addEventListener('click', closeModal);
+            
+            previewFrame.addEventListener('load', function() {
+                loader.style.display = "none";
+                previewFrame.style.display = "block";
+            });
+            
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') closeModal();
+            });
+            
+            
+            if (isTelegramWebApp) {
+                const tg = Telegram.WebApp;
+                tg.ready();
+                tg.expand();
+                tg.setHeaderColor("#0d1117");
+                modalHeader.style.display = 'none';
+                tg.BackButton.hide();
+            }
+        });
